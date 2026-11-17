@@ -1,0 +1,56 @@
+---
+import Layout from '../layouts/Layout.astro';
+import LiveFeed from '../components/LiveFeed.astro';
+import { cameras, alerts, stats } from '../lib/data';
+const pending = alerts.filter((a) => a.status === 'Nueva');
+---
+<Layout title="Monitoreo en vivo" subtitle={`${cameras.filter((c) => c.online).length} cámaras activas, ${pending.length} alertas sin revisar`}>
+  <button slot="actions" class="btn primary">Reportar incidente</button>
+
+  <section class="stats">
+    {stats.map((s) => (<div><strong>{s.value}</strong><span class="muted">{s.label}</span></div>))}
+  </section>
+
+  <section class="live">
+    <div class="main">
+      <LiveFeed cam={cameras[0].id} name={cameras[0].name} />
+      <div class="strip">
+        {cameras.slice(1, 5).map((c) => (<LiveFeed cam={c.id} name={c.name} online={c.online} compact />))}
+      </div>
+    </div>
+
+    <aside class="alerts glass">
+      <h2>Alertas recientes</h2>
+      <ul>
+        {alerts.slice(0, 5).map((a) => (
+          <li>
+            <div>
+              <p class="label">{a.label}</p>
+              <p class="muted meta">{a.camera} a las {a.time}, confianza {Math.round(a.conf * 100)} %</p>
+            </div>
+            <span class="pill" data-level={a.level}>{a.level}</span>
+          </li>
+        ))}
+      </ul>
+      <a href="/alertas" class="btn">Ver todas las alertas</a>
+    </aside>
+  </section>
+</Layout>
+<style>
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); padding: .4rem .6rem; gap: 1rem; }
+  .stats div { display: grid; gap: .2rem; }
+  .stats strong { font-size: 1.9rem; font-weight: 800; letter-spacing: -.02em; }
+  .stats span { font-size: .85rem; }
+  .live { display: grid; grid-template-columns: minmax(0, 1fr) 22rem; gap: 1.5rem; align-items: start; }
+  .main { display: grid; gap: 1rem; }
+  .strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; }
+  .alerts { padding: 1.5rem; display: grid; gap: 1rem; }
+  h2 { font-size: 1.05rem; font-weight: 800; }
+  ul { list-style: none; padding: 0; display: grid; gap: .3rem; }
+  li { display: flex; justify-content: space-between; align-items: center; gap: .8rem; padding: .8rem; border-radius: 14px; transition: background .2s; }
+  li:hover { background: var(--glass); }
+  .label { font-weight: 700; }
+  .meta { font-size: .78rem; margin-top: .15rem; }
+  @media (max-width: 1200px) { .live { grid-template-columns: 1fr; } }
+  @media (max-width: 700px) { .stats { grid-template-columns: 1fr 1fr; } .strip { grid-template-columns: 1fr 1fr; } }
+</style>

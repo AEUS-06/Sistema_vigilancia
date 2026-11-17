@@ -1,0 +1,45 @@
+---
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const items = [
+  { href: '/', label: 'Monitoreo', d: 'M3 12h4l3-8 4 16 3-8h4' },
+  { href: '/camaras', label: 'Cámaras', d: 'M3 7h11v10H3zM14 10l7-3v10l-7-3' },
+  { href: '/alertas', label: 'Alertas', d: 'M12 3l10 18H2zM12 10v5M12 18v.01' },
+  { href: '/busqueda', label: 'Búsqueda', d: 'M11 4a7 7 0 100 14 7 7 0 000-14zM21 21l-5-5' },
+];
+---
+<aside class="side glass">
+  <a href="/" class="brand">
+    <svg viewBox="0 0 32 32" width="30" height="30"><circle cx="16" cy="16" r="9" fill="none" stroke="#5eead4" stroke-width="2.6"/><circle cx="16" cy="16" r="3" fill="#5eead4"/></svg>
+    <span>Vigía</span>
+  </a>
+  <nav>
+    {items.map((i) => (
+      <a href={i.href} class:list={['link', { on: path === i.href }]} aria-current={path === i.href ? 'page' : undefined}>
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d={i.d} /></svg>
+        {i.label}
+      </a>
+    ))}
+  </nav>
+  <div class="status">
+    <p><span class="dot live"></span> Modelo YOLO activo</p>
+    <p class="muted">Inferencia 38 ms</p>
+    <p><span class="dot"></span> Índice vectorial sincronizado</p>
+  </div>
+</aside>
+<style>
+  .side { position: fixed; inset: 1rem auto 1rem 1rem; width: 15.5rem; padding: 1.4rem 1rem; display: flex; flex-direction: column; gap: 2rem; z-index: 10; }
+  .brand { display: flex; align-items: center; gap: .7rem; font-weight: 800; font-size: 1.35rem; padding: 0 .5rem; letter-spacing: -.01em; }
+  nav { display: flex; flex-direction: column; gap: .3rem; }
+  .link { display: flex; align-items: center; gap: .8rem; padding: .75rem .9rem; border-radius: 14px; color: var(--muted); font-weight: 600; transition: background .2s, color .2s; }
+  .link:hover { color: var(--ink); background: var(--glass); }
+  .link.on { color: var(--ink); background: var(--glass-strong); }
+  .link.on svg { color: var(--accent); }
+  .status { margin-top: auto; display: grid; gap: .45rem; font-size: .82rem; padding: 0 .5rem; }
+  .status .muted { padding-left: 1rem; }
+  @media (max-width: 900px) {
+    .side { inset: auto .6rem .6rem .6rem; width: auto; flex-direction: row; padding: .5rem; gap: 0; }
+    .brand span, .status { display: none; } .brand { padding: 0 .4rem; }
+    nav { flex-direction: row; flex: 1; justify-content: space-around; }
+    .link { flex-direction: column; gap: .2rem; font-size: .68rem; padding: .5rem .6rem; }
+  }
+</style>

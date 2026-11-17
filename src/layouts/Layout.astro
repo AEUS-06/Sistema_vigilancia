@@ -1,0 +1,34 @@
+---
+import '../styles/global.css';
+import Sidebar from '../components/Sidebar.astro';
+const { title, subtitle = '' } = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} – Vigía</title>
+  </head>
+  <body>
+    <Sidebar />
+    <main>
+      <header>
+        <div>
+          <h1>{title}</h1>
+          {subtitle && <p class="muted">{subtitle}</p>}
+        </div>
+        <slot name="actions" />
+      </header>
+      <slot />
+    </main>
+  </body>
+</html>
+<style>
+  main { margin-left: 17.5rem; padding: 2rem 2rem 3rem 1rem; max-width: 96rem; display: grid; gap: 1.5rem; }
+  header { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; }
+  h1 { font-size: 1.9rem; font-weight: 800; letter-spacing: -.02em; }
+  header p { margin-top: .25rem; }
+  @media (max-width: 900px) { main { margin: 0; padding: 1.2rem 1rem 6rem; } h1 { font-size: 1.5rem; } }
+</style>

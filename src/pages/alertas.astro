@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { alerts } from '../lib/data';
+const filters = ['Todas', 'crítico', 'alto', 'medio'];
+---
+<Layout title="Alertas" subtitle="Objetos de riesgo detectados por el modelo">
+  <div slot="actions" class="chips" role="group" aria-label="Filtrar por nivel">
+    {filters.map((f, i) => (<button class:list={['btn', { primary: i === 0 }]} data-f={f}>{f === 'Todas' ? f : f[0].toUpperCase() + f.slice(1)}</button>))}
+  </div>
+  <section class="glass wrap">
+    <table>
+      <thead><tr><th>Hora</th><th>Objeto</th><th>Cámara</th><th>Confianza</th><th>Nivel</th><th>Estado</th><th></th></tr></thead>
+      <tbody>
+        {alerts.map((a) => (
+          <tr data-level={a.level}>
+            <td>{a.time}</td>
+            <td><strong>{a.label}</strong></td>
+            <td>{a.camera}</td>
+            <td>{Math.round(a.conf * 100)} %</td>
+            <td><span class="pill" data-level={a.level}>{a.level}</span></td>
+            <td class="muted">{a.status}</td>
+            <td><button class="btn">Revisar</button></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+</Layout>
+<style>
+  .chips { display: flex; gap: .4rem; flex-wrap: wrap; }
+  .wrap { padding: .8rem; overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 44rem; }
+  th { text-align: left; font-size: .8rem; font-weight: 600; color: var(--muted); padding: .8rem 1rem; }
+  td { padding: .9rem 1rem; font-size: .92rem; }
+  tbody tr { transition: background .2s; }
+  tbody tr:hover { background: var(--glass); }
+  tbody td:first-child { border-radius: 14px 0 0 14px; } tbody td:last-child { border-radius: 0 14px 14px 0; text-align: right; }
+</style>
+<script>
+  const chips = document.querySelectorAll<HTMLButtonElement>('[data-f]');
+  const rows = document.querySelectorAll<HTMLElement>('tbody tr');
+  chips.forEach((c) => c.addEventListener('click', () => {
+    chips.forEach((x) => x.classList.toggle('primary', x === c));
+    rows.forEach((r) => (r.hidden = c.dataset.f !== 'Todas' && r.dataset.level !== c.dataset.f));
+  }));
+</script>

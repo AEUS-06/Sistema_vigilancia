@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+import LiveFeed from '../components/LiveFeed.astro';
+import { cameras } from '../lib/data';
+---
+<Layout title="Cámaras" subtitle="Todas las cámaras conectadas al sistema">
+  <button slot="actions" class="btn primary">Agregar cámara</button>
+  <section class="grid">
+    {cameras.map((c) => (
+      <article>
+        <LiveFeed cam={c.id} name={c.name} online={c.online} />
+        <p><strong>{c.name}</strong><span class="muted">{c.zone}</span></p>
+      </article>
+    ))}
+  </section>
+</Layout>
+<style>
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr)); gap: 1.6rem; }
+  article { display: grid; gap: .7rem; }
+  p { display: flex; justify-content: space-between; padding: 0 .4rem; }
+</style>

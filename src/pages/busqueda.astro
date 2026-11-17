@@ -1,0 +1,46 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { matches } from '../lib/data';
+---
+<Layout title="Búsqueda por similitud" subtitle="Encuentra eventos parecidos en la base de datos vectorial">
+  <section class="glass up">
+    <label class="drop" for="img">
+      <input id="img" type="file" accept="image/*" hidden />
+      <strong>Arrastra una imagen o haz clic para subirla</strong>
+      <span class="muted" id="fn">El sistema compara su embedding con los eventos guardados.</span>
+    </label>
+    <button class="btn primary" id="go">Buscar similares</button>
+  </section>
+
+  <section class="res" id="res" hidden>
+    <h2>{matches.length} coincidencias</h2>
+    <div class="grid">
+      {matches.map((m) => (
+        <article>
+          <div class="thumb"></div>
+          <p><strong>{m.label}</strong><span class="sim">{Math.round(m.sim * 100)} %</span></p>
+          <p class="muted small">{m.camera}, {m.time}</p>
+          <p class="muted small">{m.id}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</Layout>
+<style>
+  .up { padding: 1.5rem; display: grid; gap: 1rem; justify-items: start; }
+  .drop { width: 100%; display: grid; gap: .4rem; place-items: center; text-align: center; padding: 2.5rem 1rem; border-radius: 16px; border: 1.5px dashed rgba(20,27,45,.22); cursor: pointer; transition: background .2s; }
+  .drop:hover, .drop:focus-within { background: var(--glass); }
+  h2 { font-size: 1.05rem; font-weight: 800; margin-bottom: 1rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: 1.2rem; }
+  article { padding: 0; display: grid; gap: .35rem; }
+  .thumb { aspect-ratio: 4 / 3; border-radius: 14px; background: linear-gradient(135deg, rgba(79,124,255,.3), rgba(94,234,212,.3)); margin-bottom: .4rem; }
+  article p { display: flex; justify-content: space-between; padding: 0 .3rem; }
+  .sim { color: var(--accent); font-weight: 800; }
+  .small { font-size: .8rem; }
+</style>
+<script>
+  // Conecta aquí tu API: envía la imagen, recibe los vecinos más cercanos y pinta los resultados.
+  const input = document.getElementById('img') as HTMLInputElement;
+  input.addEventListener('change', () => { document.getElementById('fn')!.textContent = input.files?.[0]?.name ?? ''; });
+  document.getElementById('go')!.addEventListener('click', () => { document.getElementById('res')!.hidden = false; });
+</script>

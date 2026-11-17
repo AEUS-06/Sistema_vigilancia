@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg: #eceff4;
+  --ink: #141b2d;
+  --muted: #5d6985;
+  --accent: #0d9488;
+  --blue: #4f7cff;
+  --crit: #e0364a;
+  --high: #c77700;
+  --mid: #1d78c9;
+  --glass: rgba(255, 255, 255, 0.55);
+  --glass-strong: rgba(255, 255, 255, 0.8);
+  --radius: 22px;
+  color-scheme: light;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; }
+html { background: var(--bg); }
+body {
+  min-height: 100vh;
+  font-family: 'Manrope', system-ui, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(55rem 38rem at 6% -8%, rgba(120, 160, 255, 0.45), transparent 60%),
+    radial-gradient(48rem 36rem at 100% 100%, rgba(94, 234, 212, 0.38), transparent 60%),
+    radial-gradient(32rem 26rem at 80% 6%, rgba(190, 170, 255, 0.3), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+button, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 10px; }
+
+.glass {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(26px) saturate(150%);
+  backdrop-filter: blur(26px) saturate(150%);
+  border-radius: var(--radius);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 18px 50px -18px rgba(40, 55, 110, 0.28);
+}
+.pill {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .28rem .7rem; border-radius: 999px;
+  font-size: .78rem; font-weight: 700;
+  background: color-mix(in srgb, var(--c, var(--mid)) 18%, transparent);
+  color: var(--c, var(--mid));
+}
+.pill[data-level='crítico'] { --c: var(--crit); }
+.pill[data-level='alto'] { --c: var(--high); }
+.pill[data-level='medio'] { --c: var(--mid); }
+.btn {
+  padding: .6rem 1.1rem; border: 0; border-radius: 12px; cursor: pointer;
+  font-weight: 700; font-size: .88rem;
+  background: var(--glass-strong); transition: background .2s;
+}
+.btn:hover { background: #fff; }
+.btn.primary { background: var(--ink); color: #fff; }
+.btn.primary:hover { background: #2a3552; }
+.muted { color: var(--muted); }
+.dot { width: .5rem; height: .5rem; border-radius: 50%; background: var(--accent); display: inline-block; }
+.dot.off { background: var(--crit); }
+.dot.live { animation: pulse 1.8s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .dot.live { animation: none; } }

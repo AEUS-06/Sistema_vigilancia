@@ -1,0 +1,9 @@
+{
+  "name": "vigia-interfaz",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": { "dev": "astro dev", "build": "astro build", "preview": "astro preview" },
+  "packageManager": "pnpm@9.15.0",
+  "dependencies": { "astro": "^5.0.0" },
+  "pnpm": { "onlyBuiltDependencies": ["esbuild", "sharp"] }
+}
